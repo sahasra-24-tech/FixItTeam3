@@ -65,7 +65,9 @@ public class WebSecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authz -> authz
                 .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/public/**").permitAll()
+.requestMatchers("/api/auth/**").permitAll()
+.requestMatchers("/public/**").permitAll()
+.requestMatchers("/api/public/**").permitAll()
                 .requestMatchers("/uploads/**").permitAll()  // Public access to uploaded files
                 .requestMatchers("/api/messages/**").permitAll()  // MOVED TO TOP FOR PRIORITY
                 .requestMatchers("/ws/**").permitAll()
