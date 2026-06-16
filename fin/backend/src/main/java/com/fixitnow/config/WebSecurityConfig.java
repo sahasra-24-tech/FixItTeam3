@@ -65,26 +65,25 @@ public class WebSecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authz -> authz
                 .requestMatchers("/auth/**").permitAll()
-.requestMatchers("/api/auth/**").permitAll()
-.requestMatchers("/public/**").permitAll()
-.requestMatchers("/api/public/**").permitAll()
-                .requestMatchers("/uploads/**").permitAll()  // Public access to uploaded files
-                .requestMatchers("/api/messages/**").permitAll()  // MOVED TO TOP FOR PRIORITY
+                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/error").permitAll()
+                .requestMatchers("/public/**").permitAll()
+                .requestMatchers("/api/public/**").permitAll()
+                .requestMatchers("/uploads/**").permitAll()
+                .requestMatchers("/api/messages/**").permitAll()
                 .requestMatchers("/ws/**").permitAll()
-                // Public access to service browsing (before authentication)
-                .requestMatchers("/services", "/services/**").permitAll()  // Allow public access to view services
-                .requestMatchers("/services/categories").permitAll()  // Allow public access to categories
-                .requestMatchers("/services/subcategories").permitAll()  // Allow public access to subcategories  
-                .requestMatchers("/services/map/**").permitAll()  // Allow public access to map services
-                .requestMatchers("/services/*/reviews").permitAll()  // Allow public access to service reviews
-                .requestMatchers("/users/{id}").permitAll()  // Public access to user profile for chat
+                .requestMatchers("/services", "/services/**").permitAll()
+                .requestMatchers("/services/categories").permitAll()
+                .requestMatchers("/services/subcategories").permitAll()
+                .requestMatchers("/services/map/**").permitAll()
+                .requestMatchers("/services/*/reviews").permitAll()
+                .requestMatchers("/users/{id}").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/provider/**").hasAnyRole("PROVIDER", "ADMIN")
                 .requestMatchers("/customer/**").hasAnyRole("CUSTOMER", "ADMIN")
-                // Protected endpoints (require authentication)
-                .requestMatchers("/upload").authenticated()  // File upload requires authentication
+                .requestMatchers("/upload").authenticated()
                 .requestMatchers("/bookings/**").authenticated()
-                .requestMatchers("/reviews").authenticated()  // Creating reviews requires auth
+                .requestMatchers("/reviews").authenticated()
                 .requestMatchers("/users/**").authenticated()
                 .anyRequest().authenticated()
             );
@@ -99,10 +98,10 @@ public class WebSecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOriginPatterns(Arrays.asList(allowedOrigins.split(",")));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));  // Added PATCH method
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
-        configuration.setMaxAge(3600L);  // Cache preflight response for 1 hour
+        configuration.setMaxAge(3600L);
         
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
