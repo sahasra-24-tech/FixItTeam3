@@ -97,6 +97,7 @@ public class AuthController {
                 error.put("message", "No account found with this email address");
                 return ResponseEntity.badRequest().body(error);
             }
+            
 
             Authentication authentication;
             try {
@@ -139,6 +140,11 @@ public class AuthController {
             return ResponseEntity.badRequest().body(error);
         }
     }
+    @GetMapping("/health")
+public ResponseEntity<String> healthCheck() {
+    return ResponseEntity.ok("Backend is alive!");
+}
+
 
     // ... (rest of your signup, refresh, admin-register, me, forgot-password, reset-password methods remain unchanged)
 }
