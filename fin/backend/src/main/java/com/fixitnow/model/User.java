@@ -45,7 +45,8 @@ public class User {
 
     // Verification fields
     private String documentType; // ShopAct, MSME Certificate, Udyam
-    private String verificationDocument;
+    @Column(columnDefinition = "LONGTEXT")
+private String verificationDocument;
     @Column(columnDefinition = "TEXT")
     private String verificationRejectionReason;
 
