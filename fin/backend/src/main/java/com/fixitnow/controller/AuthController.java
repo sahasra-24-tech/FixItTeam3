@@ -108,12 +108,6 @@ public class AuthController {
             }
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-                    
-            if (user.getRole() == User.Role.PROVIDER && (user.getIsVerified() == null || !user.getIsVerified())) {
-                Map<String, String> error = new HashMap<>();
-                error.put("message", "Admin Not Approved This profile yet Please Wait We'll Get Reach You Soon");
-                return ResponseEntity.status(403).body(error);
-            }
 
             String jwt = jwtUtils.generateJwtToken(user.getEmail(), user.getRole().name());
             String refreshToken = jwtUtils.generateRefreshToken(user.getEmail());
@@ -163,7 +157,7 @@ public class AuthController {
                 user.setServiceArea(signUpRequest.getServiceArea());
                 user.setDocumentType(signUpRequest.getDocumentType());
                 user.setVerificationDocument(signUpRequest.getVerificationDocument());
-                user.setIsVerified(false);
+                user.setIsVerified(true);
             }
 
             userRepository.save(user);
@@ -202,7 +196,7 @@ public class AuthController {
     @PostMapping("/admin-register")
     public ResponseEntity<?> registerAdmin(@Valid @RequestBody SignupRequest signUpRequest) {
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Admin registration is disabled. Please contact the system administrator.");
+        response.put("message", "Admin registration is disabled.");
         return ResponseEntity.status(403).body(response);
     }
 
@@ -262,11 +256,9 @@ public class AuthController {
 
             try {
                 emailService.sendPasswordResetEmail(email, resetCode);
-                
                 Map<String, String> response = new HashMap<>();
                 response.put("message", "Password reset code sent to your email address.");
                 return ResponseEntity.ok(response);
-                
             } catch (Exception emailError) {
                 Map<String, String> response = new HashMap<>();
                 response.put("message", "Email service temporarily unavailable. Your reset code is: " + resetCode);
